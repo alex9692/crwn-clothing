@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 
 import "./header.styles.scss";
 
@@ -31,4 +32,8 @@ const Header = ({ user }) => (
   </div>
 );
 
-export default Header;
+const mapStateToProps = (state) => ({
+  user: state.user.user,
+});
+
+export default connect(mapStateToProps)(Header);
