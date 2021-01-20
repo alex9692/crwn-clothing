@@ -13,3 +13,21 @@
     justify-content: space-between;
   }
 }
+
+@media (max-width: 900px) {
+  .collection-preview {
+    .preview {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .collection-preview {
+    .preview {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+}

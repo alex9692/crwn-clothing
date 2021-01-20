@@ -1,10 +1,11 @@
 .collection-item {
-  width: 22%;
+  width: 22vw;
   display: flex;
   flex-direction: column;
   height: 350px;
   align-items: center;
   position: relative;
+  margin: 0 0.25rem;
 
   .image {
     width: 100%;
@@ -46,6 +47,34 @@
     .custom-button {
       display: flex;
       opacity: 0.85;
+    }
+  }
+}
+@media (max-width: 900px) {
+  .collection-item {
+    width: 40%;
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .collection-item {
+    height: 250px;
+    width: 80%;
+    margin-bottom: 1rem;
+    .collection-footer {
+      font-size: 0.8rem;
+    }
+    .custom-button {
+      top: 150px;
+    }
+  }
+}
+
+@media (max-width: 400px) {
+  .collection-item {
+    .collection-footer {
+      font-size: 0.75rem;
     }
   }
 }
