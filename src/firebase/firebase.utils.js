@@ -62,6 +62,20 @@ export const convertCollectionsSnapshotToMap = (collections) => {
   }, {});
 };
 
+export const getCurrentUser = () => {
+  return new Promise((resolve, reject) => {
+    const unsubscribeFromAuth = auth.onAuthStateChanged(
+      (user) => {
+        unsubscribeFromAuth();
+        resolve(user);
+      },
+      (error) => {
+        reject(error);
+      }
+    );
+  });
+};
+
 if (firebase.apps.length === 0) {
   firebase.initializeApp(config);
 }
@@ -69,8 +83,9 @@ if (firebase.apps.length === 0) {
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
 
-const provider = new firebase.auth.GoogleAuthProvider();
-provider.setCustomParameters({ prompt: "select_account" });
-export const signInWithGoogle = () => auth.signInWithPopup(provider);
+const googleProvider = new firebase.auth.GoogleAuthProvider();
+googleProvider.setCustomParameters({ prompt: "select_account" });
 
-export default firebase;
+// export const signInWithGoogle = () => auth.signInWithPopup(googleProvider);
+
+export { firebase as default, googleProvider };

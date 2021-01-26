@@ -10,9 +10,11 @@ import "./App.css";
 //   addCollectionAndDocuments,
 // } from "./firebase/firebase.utils";
 // import { selectCollections } from "./redux/shop/shop.selectors";
-import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
-import { SET_CURRENT_USER } from "./redux/user/user.actions";
-import { selectCurrentUser } from "./redux/user/user.selectors";
+import {
+  selectCurrentUser,
+  selectIsLoading,
+} from "./redux/user/user.selectors";
+import { CHECK_USER_SESSION_START } from "./redux/user/user.actions";
 
 import WithSpinner from "./components/with-spinner/with-spinner.component";
 import App2 from "./App2";
@@ -20,47 +22,13 @@ import App2 from "./App2";
 const AppWithSpinner = WithSpinner(App2);
 
 class App extends React.Component {
-  constructor() {
-    super();
-
-    this.state = { loading: true };
-  }
-
-  unsubscribeFromAuth = null;
-
   componentDidMount() {
-    // const { setCurrentUser, collections } = this.props;
-    // addCollectionAndDocuments(
-    //   "collections",
-    //   collections.map(({ title, items }) => ({ title, items }))
-    // );
-
-    const { setCurrentUser } = this.props;
-
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        const userRef = await createUserProfileDocument(user);
-        userRef.onSnapshot((snapshot) => {
-          setCurrentUser({
-            id: snapshot.id,
-            ...snapshot.data(),
-          });
-          this.setState({ loading: false });
-        });
-      } else {
-        setCurrentUser(user);
-        this.setState({ loading: false });
-      }
-    });
-  }
-
-  componentWillUnmount() {
-    this.unsubscribeFromAuth();
+    const { checkUserSession } = this.props;
+    checkUserSession();
   }
 
   render() {
-    const { loading } = this.state;
-    const { user } = this.props;
+    const { user, loading } = this.props;
 
     return <AppWithSpinner isLoading={loading} user={user} />;
   }
@@ -68,11 +36,12 @@ class App extends React.Component {
 
 const mapStateToProps = createStructuredSelector({
   user: selectCurrentUser,
+  loading: selectIsLoading,
   // collections: selectCollections,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  setCurrentUser: (user) => dispatch(SET_CURRENT_USER(user)),
+  checkUserSession: () => dispatch(CHECK_USER_SESSION_START()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
